@@ -9,10 +9,19 @@ module.exports.signEmail = function (email) {
 	return jwt.sign({ email }, process.env.JWT_EMAIL_SECRET, { expiresIn: '24h' });
 };
 
-module.exports.verifyTokenAndGetUser = async function (token, res, options) {
+module.exports.verifyToken = async function (token) {
+    try {
+        const email = await jwt.verify(token, process.env.JWT_SECRET);
+        return email;
+    } catch (error) {
+        return "Error";
+    }
+}
+
+module.exports.verifyTokenAndGetUser = async function (token, res, options = {}) {
 	try {
 		const { email } = await jwt.verify(token, process.env.JWT_SECRET);
-		if (options?.populate) {
+		if ('populate' in options) {
 			const user = await User.findOne({ email }).populate(options.populate);
 			return user;
 		} else {

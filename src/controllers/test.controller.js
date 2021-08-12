@@ -15,7 +15,7 @@ testController.startTest = async (req, res) => {
 		return;
 	}
 
-	if (user.paidTests < 1) {
+	if (user.paidTests < 0) {
 		res.json({ status: 'No tests remaining. Please buy more tests.' });
 		return;
 	}
@@ -27,9 +27,9 @@ testController.startTest = async (req, res) => {
 	const resultRef = new Result({ test: testRef._id, answers: Array(testRef.questions.length).fill({}) });
 	studentRef.results.push(resultRef._id);
 
-	resultRef.save();
-	studentRef.save();
-	user.save();
+	await resultRef.save();
+	await studentRef.save();
+	await user.save();
 
 	return res.json({ questions: testRef.questions, testId: testRef._id, resultId: resultRef._id });
 };

@@ -1,4 +1,4 @@
-const { verifyTokenAndGetUser } = require('../auth/tokenManager');
+const { verifyTokenAndGetUser, verifyToken } = require('../auth/tokenManager');
 
 const User = require('../models/User');
 const Student = require('../models/Student');
@@ -72,8 +72,8 @@ studentsController.getStudentById = async (req, res) => {
 	const user = await verifyTokenAndGetUser(token, res);
 
 	if (user === 'Error') return;
-
-	if (!user.patients.includes(studentId)) {
+	
+	if (!user.students.includes(studentId)) {
 		res.status(400).json({ status: 'This patient is not from this user.' });
 		return;
 	}
