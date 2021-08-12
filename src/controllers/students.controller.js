@@ -1,6 +1,8 @@
 const { verifyTokenAndGetUser } = require('../auth/tokenManager');
 
+const User = require('../models/User');
 const Student = require('../models/Student');
+
 const getResults = require('../utils/getResults');
 
 const studentsController = {};
@@ -87,8 +89,7 @@ studentsController.getAllUserStudents = async (req, res) => {
 	const user = await verifyTokenAndGetUser(token, res);
 
 	if (user === 'Error') return;
-
-	res.json({ patients: user.patients });
+	res.json(await user.populate('students').students);
 };
 
 module.exports = studentsController;

@@ -12,6 +12,11 @@ const studentsRouter = require('./routes/students.router');
 const resultsRouter = require('./routes/test.router');
 const usersRouter = require('./routes/users.router');
 
+const User = require('./models/User');
+const Student = require('./models/Student');
+const Test = require('./models/Test');
+const Result = require('./models/Result');
+
 mongoose.connect(process.env.DB_URL, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,

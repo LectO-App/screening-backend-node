@@ -20,7 +20,7 @@ testController.startTest = async (req, res) => {
 		return;
 	}
 
-	user.paidTests -= 1;
+	user.paidTests += 1;
 	const studentRef = await Student.findOne({ _id: student });
 	const testRef = await Test.findOne({ _id: '60422c4bed2541b30a910b81' });
 
