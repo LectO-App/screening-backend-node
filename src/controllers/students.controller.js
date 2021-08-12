@@ -86,10 +86,11 @@ studentsController.getStudentById = async (req, res) => {
 
 studentsController.getAllUserStudents = async (req, res) => {
 	const { token } = req.body;
-	const user = await verifyTokenAndGetUser(token, res);
+	const user = await verifyTokenAndGetUser(token, res, { populate: 'students' });
 
 	if (user === 'Error') return;
-	res.json(await user.populate('students').students);
+
+	res.json(user.students);
 };
 
 module.exports = studentsController;
