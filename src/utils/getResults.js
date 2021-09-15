@@ -164,3 +164,6 @@ const checkResultPerformance = answers => {
 
 	return performance;
 };
+
+// Revisar
+// Hacer curva de gauss por todos los estudiantes del mismo usuario

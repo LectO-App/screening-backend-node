@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"start": "node src",
-		"dev": "nodemon src"
+		"dev": "nodemon src",
+		"swagger-autogen": "node swagger.js"
 	},
 	"author": "",
 	"license": "ISC",
@@ -15,6 +16,7 @@
 		"cors": "^2.8.5",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
+		"express-jwt": "^6.1.0",
 		"helmet": "^4.6.0",
 		"jsonwebtoken": "^8.5.1",
 		"mongoose": "^5.13.6",

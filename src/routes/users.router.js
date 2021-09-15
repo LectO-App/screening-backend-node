@@ -1,4 +1,5 @@
 const Router = require('express').Router;
+var jwt = require('express-jwt');
 
 const usersController = require('../controllers/users.controller');
 
@@ -13,6 +14,6 @@ router.post('/signUp', usersController.signUp);
 router.post('/get', usersController.getUserById);
 router.post('/sendEmail', usersController.sendEmail);
 router.post('/verifyEmail', usersController.verifyEmail);
-router.post('/validateToken', usersController.validateToken);
+router.post('/validateToken', jwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }), usersController.validateToken);
 
 module.exports = router;

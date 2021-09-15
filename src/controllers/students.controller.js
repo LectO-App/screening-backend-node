@@ -11,10 +11,14 @@ studentsController.createStudent = async (req, res) => {
 	const { token, student } = req.body;
 	const user = await verifyTokenAndGetUser(token, res);
 
-	if (user === 'Error') return;
+	if (user === 'Error') res.status(401).json;
 
-	const studentDb = await Student.create(student);
-	user.students.push(studentDb._id);
+	try {
+		const studentDb = await Student.create(student);
+		user.students.push(studentDb._id);
+	} catch (e) {
+
+	}
 
 	await user.save();
 
