@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require('express');
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('../swagger_output.json')
 
 const helmet = require('helmet');
 const cors = require('cors');
@@ -35,10 +37,11 @@ app.use(express.json());
 const PORT = process.env.PORT || 3030;
 
 app.get('/', (_, res) => res.send('Bienvenido a Screening Dislexia'));
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
+app.use('/users', usersRouter);
 app.use('/students', studentsRouter);
 app.use('/results', resultsRouter);
-app.use('/users', usersRouter);
 
 app.listen(PORT, () => {
 	console.log('Server started at port ' + PORT);

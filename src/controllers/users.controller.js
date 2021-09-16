@@ -44,15 +44,17 @@ usersController.signIn = async (req, res) => {
 };
 
 usersController.signUp = async (req, res) => {
-	const input = req.body;
+	
+	const input = {
+		email: req.body.email,
+		password: req.body.password,
+		name: req.body.name,
+	};
+
 	const isValid = inputValidation(input);
-
 	if (!(isValid === 'OK')) return res.status(400).json({ status: isValid });
-
 	const users = await User.find({ email: input.email }).countDocuments();
-
 	if (users > 0) return res.status(400).json({ status: 'Ya existe un usuario con ese correo electrónico.' });
-
 	const hash = await bcrypt.hash(input.password, 8);
 
 	await new User({
@@ -71,7 +73,7 @@ usersController.sendEmail = async (req, res) => {
 	const { token } = req.body;
 	const user = await verifyTokenAndGetUser(token, res);
 
-	if (user.verified) return res.json({ status: 'Email already verified' });
+	if (user.verified) return res.status(400).json({ status: 'Email already verified' });
 
 	sendEmail(user.email, req.originalUrl);
 	return res.json({ status: 'Verification email sent' });
