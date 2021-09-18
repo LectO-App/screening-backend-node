@@ -353,8 +353,8 @@
         "tags": [
           "Users"
         ],
-        "summary": "Verify your email",
-        "description": "Given an email token, it lets you verify your account",
+        "summary": "Change password",
+        "description": "Use an emailed token to change your password",
         "parameters": [
           {
             "name": "obj",
@@ -374,7 +374,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Email sent",
+            "description": "Password changed",
             "schema": {
               "type": "object",
               "properties": {
@@ -408,30 +408,136 @@
     },
     "/students/create": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Students"
+        ],
+        "summary": "Create new student",
+        "description": "This lets you create a new student for a certain user",
         "parameters": [
           {
-            "name": "obj",
+            "name": "body",
             "in": "body",
+            "description": "User to create",
             "schema": {
               "type": "object",
               "properties": {
-                "token": {
-                  "example": "any"
+                "key": {
+                  "type": "string",
+                  "example": "key"
                 },
                 "student": {
-                  "example": "any"
+                  "type": "object",
+                  "properties": {
+                    "alias": {
+                      "type": "string",
+                      "example": "Nombre"
+                    },
+                    "province": {
+                      "type": "string",
+                      "example": "CABA"
+                    },
+                    "locality": {
+                      "type": "string",
+                      "example": "CABA"
+                    },
+                    "birth": {
+                      "type": "string",
+                      "example": "Date()"
+                    },
+                    "schoolType": {
+                      "type": "array",
+                      "example": [
+                        "Privada",
+                        "Publica"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "genre": {
+                      "type": "array",
+                      "example": [
+                        "Masculino",
+                        "Femenino",
+                        "Otro"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "isSpanish": {
+                      "type": "array",
+                      "example": [
+                        "true",
+                        "false"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "schoolYear": {
+                      "type": "array",
+                      "example": [
+                        0,
+                        1,
+                        2,
+                        3
+                      ],
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "previousDiagnostic": {
+                      "type": "array",
+                      "example": [
+                        true,
+                        false
+                      ],
+                      "items": {
+                        "type": "boolean"
+                      }
+                    },
+                    "previousDiagnostcDetails": {
+                      "type": "string",
+                      "example": "Si la respuesta anterior fue true"
+                    },
+                    "hand": {
+                      "type": "array",
+                      "example": [
+                        "Diestro",
+                        "Zurdo"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "parentsLevel": {
+                      "type": "string",
+                      "example": "Universitario"
+                    }
+                  },
+                  "required": [
+                    "alias",
+                    "province",
+                    "locality",
+                    "birth",
+                    "schoolType",
+                    "genre",
+                    "isSpanish",
+                    "schoolYear",
+                    "previousDiagnostic",
+                    "previousDiagnostcDetails"
+                  ]
                 }
-              }
+              },
+              "required": [
+                "key",
+                "student"
+              ]
             }
           }
         ],
-        "responses": {
-          "401": {
-            "description": "Unauthorized"
-          }
-        }
+        "responses": {}
       }
     },
     "/students/delete": {

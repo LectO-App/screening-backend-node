@@ -8,26 +8,74 @@ const getResults = require('../utils/getResults');
 const studentsController = {};
 
 studentsController.createStudent = async (req, res) => {
+
+	// #swagger.tags = ['Students']
+	// #swagger.summary = 'Create new student'
+	// #swagger.description = 'This lets you create a new student for a certain user'
+
 	const { token, student } = req.body;
 	const user = await verifyTokenAndGetUser(token, res);
 
-	if (user === 'Error') res.status(401).json;
+	/*  #swagger.parameters['body'] = {
+		in: 'body',
+		description: 'User to create',
+		schema: {
+			$token: 'token',
+			$student: {
+				$alias: 'Nombre',
+				$province: 'CABA',
+				$locality: 'CABA',
+				$birth: '2020-01-01',
+				$schoolType: ['Privada', 'Publica'],
+				$genre: ['Masculino', 'Femenino', 'Otro'],
+				$isSpanish: ['true', 'false'],
+				$schoolYear: [0, 1, 2, 3],
+				$previousDiagnostic: [true, false],
+				$previousDiagnostcDetails: 'Si la respuesta anterior fue true',
+				hand: ['Diestro','Zurdo'],
+				parentsLevel: 'Universitario',
+			}
+		}
+	} */
 
 	try {
 		const studentDb = await Student.create(student);
 		user.students.push(studentDb._id);
-	} catch (e) {
-
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ status: 'An error occured creting the student', error });
 	}
 
 	await user.save();
-
 	res.json({ status: 'Correctly created student' });
+
+	/* #swagger.responses[200] = {
+        description: 'Correcly created student',
+        schema: {
+			$status: 'Correctly created student',
+		}
+	} */
 };
 
 studentsController.deleteStudent = async (req, res) => {
+
+	// #swagger.tags = ['Students']
+	// #swagger.summary = 'Deletes an existing student'
+	// #swagger.description = 'This lets you delete a student for a certain user'
+
 	const { token, student } = req.body;
 	const user = await verifyTokenAndGetUser(token, res);
+
+	/*  #swagger.parameters['body'] = {
+		in: 'body',
+		description: 'User to delete',
+		schema: {
+			$token: 'token',
+			$student: {
+				$id: 'studentId',
+			}
+		}
+	} */
 
 	// eslint-disable-next-line
 	if (!student.hasOwnProperty('id')) {
@@ -46,7 +94,14 @@ studentsController.deleteStudent = async (req, res) => {
 	user.students.splice(user.students.indexOf(id), 1);
 	await user.save();
 
-	res.json({ status: 'Correctly deleted user' });
+	res.json({ status: 'Correctly deleted student' });
+	
+	/* #swagger.responses[200] = {
+        description: 'Correcly deleted student',
+        schema: {
+			$status: 'Correctly deleted student',
+		}
+	} */
 };
 
 studentsController.modifyStudent = async (req, res) => {

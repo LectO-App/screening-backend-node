@@ -167,3 +167,4 @@ const checkResultPerformance = answers => {
 
 // Revisar
 // Hacer curva de gauss por todos los estudiantes del mismo usuario
+// https://www.mathsisfun.com/data/standard-deviation.html https://simplestatistics.org/docs/#variance
