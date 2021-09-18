@@ -1,10 +1,8 @@
 const bcrypt = require('bcryptjs');
-
-const { verifyTokenAndGetUser, signToken } = require('../auth/tokenManager');
-
+const { verifyTokenAndGetUser, signToken, verifyRestorePassword } = require('../auth/tokenManager');
 const User = require('../models/User');
-
 const sendEmail = require('../utils/sendEmail');
+const sendEmailRestore = require('../utils/sendEmailRestore');
 
 const usersController = {};
 
@@ -25,7 +23,15 @@ const inputValidation = input => {
 };
 
 usersController.signIn = async (req, res) => {
+
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Get a token for a certain user'
+
 	const { email, password } = req.body;
+
+	// swagger.parameters['email'] = {in: 'body', type: 'string', required: true}
+	// swagger.parameters['password'] = {in: 'body', type: 'string', required: true}
+
 	const user = await User.findOne({ email });
 
 	if (!user) {
@@ -45,11 +51,18 @@ usersController.signIn = async (req, res) => {
 
 usersController.signUp = async (req, res) => {
 	
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Creates a new user'
+
 	const input = {
 		email: req.body.email,
 		password: req.body.password,
 		name: req.body.name,
 	};
+
+	// swagger.parameters['email'] = {in: 'body', type: 'string', required: true}
+	// swagger.parameters['password'] = {in: 'body', type: 'string', required: true}
+	// swagger.parameters['name'] = {in: 'body', type: 'string', required: true}
 
 	const isValid = inputValidation(input);
 	if (!(isValid === 'OK')) return res.status(400).json({ status: isValid });
@@ -67,33 +80,71 @@ usersController.signUp = async (req, res) => {
 	sendEmail(input.email);
 
 	res.json({ verified: false, token: signToken(input.email) });
+
+	/* #swagger.responses[200] = {
+        description: 'Correct sign up',
+        schema: {
+			$verified: true,
+			$token: 'token'
+		}
+	} */
 };
 
 usersController.sendEmail = async (req, res) => {
-	const { token } = req.body;
-	const user = await verifyTokenAndGetUser(token, res);
 
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Sends a new verification email'
+
+	const { token } = req.body;
+
+	// swagger.parameters['email'] = {in: 'body', type: 'string', required: true}
+
+	const user = await verifyTokenAndGetUser(token, res);
 	if (user.verified) return res.status(400).json({ status: 'Email already verified' });
 
-	sendEmail(user.email, req.originalUrl);
+	sendEmail(user.email);
 	return res.json({ status: 'Verification email sent' });
-};
 
-usersController.getAllUsers = async (req, res) => {
-	const allUsers = await User.find().populate('patients');
-	return res.json(allUsers);
+	/* #swagger.responses[200] = {
+        description: 'Email sent',
+        schema: {
+			$status: 'Verification email sent',
+		}
+	} */
 };
 
 usersController.getUserById = async (req, res) => {
-	const { token } = req.body;
-	const user = await verifyTokenAndGetUser(token, res);
 
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Retrieves user data'
+	// #swagger.description = 'Given a user token, it retrieves users data'
+
+	const { token } = req.body;
+
+	// swagger.parameters['token'] = {in: 'body', type: 'string', required: true}
+
+	const user = await verifyTokenAndGetUser(token, res);
 	return res.json(user);
+
+	/* #swagger.responses[200] = {
+        description: 'Email sent',
+        schema: {
+			$status: 'Verification email sent',
+		}
+	} */
 };
 
 usersController.verifyEmail = async (req, res) => {
+	
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Verify your email'
+	// #swagger.description = 'Given an email token, it lets you verify your account'
+
 	const { token } = req.body;
-	const user = await verifyTokenAndGetUser(token, res);
+
+	// swagger.parameters['token'] = {in: 'body', type: 'string', required: true}
+
+	const user = await verifyEmail(token, res);
 
 	if (user.verified) return res.json({ status: 'Email already verified' });
 
@@ -103,13 +154,90 @@ usersController.verifyEmail = async (req, res) => {
 	await user.save();
 
 	res.json({ success: 'Email has been verified succesfully.', token: signToken(user.email) });
+
+	/* #swagger.responses[200] = {
+        description: 'Email sent',
+        schema: {
+			$success: 'Email has been verified succesfully.',
+			token: 'signedToken',
+		}
+	} */
+};
+
+usersController.sendRestorePassword = async (req, res) => {
+	
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Send email for password restoration'
+	// #swagger.description = 'Given an email, it lets you send a password restore email'
+
+	const { email } = req.body;
+	// swagger.parameters['email'] = {in: 'body', type: 'string', required: true}
+	try {
+
+		const user = await User.findOne({ email });
+		//if (!user.verified) throw new Error("Email not verified");
+		sendEmailRestore(user.email);
+	
+		return res.json({ status: 'Restore password email sent' });
+
+	} catch (error) {
+
+		console.log(error);
+		res.status(400).json({ status: 'Email does not exist or has not been verified' });
+
+	}
+
+	/* #swagger.responses[200] = {
+        description: 'Email sent',
+        schema: {
+			$status: 'Restore password email sent',
+		}
+	} */
+}
+
+usersController.restorePassword = async (req, res) => {
+	
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Change password'
+	// #swagger.description = 'Use an emailed token to change your password'
+
+	const { token, password } = req.body;
+
+	// swagger.parameters['token'] = {in: 'body', type: 'string', required: true}
+
+	const user = await verifyRestorePassword(token, res);
+	user.password = await bcrypt.hash(password, 8);
+	await user.save();
+
+	res.json({ success: 'Password has been changed succesfully.', token: signToken(user.email) });
+
+	/* #swagger.responses[200] = {
+        description: 'Password changed',
+        schema: {
+			$success: 'Password has been changed succesfully succesfully.',
+			token: 'signedToken',
+		}
+	} */
 };
 
 usersController.validateToken = async (req, res) => {
+
+	// #swagger.tags = ['Users']
+	// #swagger.summary = 'Validate token'
+	// #swagger.description = 'It gives you a new token. Works like a keep alive.'
+
 	const { token } = req.body;
+	// swagger.parameters['token'] = {in: 'body', type: 'string', required: true}
 	const user = await verifyTokenAndGetUser(token, res);
 
 	return res.json({ token: signToken(user.email), verified: user.verified });
+	/* #swagger.responses[200] = {
+        description: 'Email sent',
+        schema: {
+			$token: 'token',
+			$verified: true,
+		}
+	} */
 };
 
 module.exports = usersController;

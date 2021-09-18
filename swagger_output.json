@@ -32,7 +32,10 @@
     },
     "/users/signIn": {
       "post": {
-        "tags": [],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get a token for a certain user",
         "description": "",
         "parameters": [
           {
@@ -60,7 +63,10 @@
     },
     "/users/signUp": {
       "post": {
-        "tags": [],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Creates a new user",
         "description": "",
         "parameters": [
           {
@@ -83,6 +89,29 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "Correct sign up",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "verified": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "token": {
+                  "type": "string",
+                  "example": "token"
+                }
+              },
+              "required": [
+                "verified",
+                "token"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
           "400": {
             "description": "Bad Request"
           }
@@ -91,8 +120,11 @@
     },
     "/users/get": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Retrieves user data",
+        "description": "Given a user token, it retrieves users data",
         "parameters": [
           {
             "name": "obj",
@@ -107,12 +139,34 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Email sent",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Verification email sent"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/users/sendEmail": {
       "post": {
-        "tags": [],
+        "tags": [
+          "Users"
+        ],
+        "summary": "Sends a new verification email",
         "description": "",
         "parameters": [
           {
@@ -128,13 +182,38 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Email sent",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Verification email sent"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
       }
     },
     "/users/verifyEmail": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Verify your email",
+        "description": "Given an email token, it lets you verify your account",
         "parameters": [
           {
             "name": "obj",
@@ -149,13 +228,39 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Email sent",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "Email has been verified succesfully."
+                },
+                "token": {
+                  "type": "string",
+                  "example": "signedToken"
+                }
+              },
+              "required": [
+                "success"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/users/validateToken": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users"
+        ],
+        "summary": "Validate token",
+        "description": "It gives you a new token. Works like a keep alive.",
         "parameters": [
           {
             "name": "obj",
@@ -170,7 +275,127 @@
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Email sent",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "token"
+                },
+                "verified": {
+                  "type": "boolean",
+                  "example": true
+                }
+              },
+              "required": [
+                "token",
+                "verified"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/restorePasswordEmail": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Send email for password restoration",
+        "description": "Given an email, it lets you send a password restore email",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email sent",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Restore password email sent"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/restorePassword": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Verify your email",
+        "description": "Given an email token, it lets you verify your account",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email sent",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "string",
+                  "example": "Password has been changed succesfully succesfully."
+                },
+                "token": {
+                  "type": "string",
+                  "example": "signedToken"
+                }
+              },
+              "required": [
+                "success"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
       }
     },
     "/students/": {

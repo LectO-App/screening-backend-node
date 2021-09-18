@@ -13,5 +13,7 @@ router.post('/get', usersController.getUserById);
 router.post('/sendEmail', usersController.sendEmail);
 router.post('/verifyEmail', usersController.verifyEmail);
 router.post('/validateToken', usersController.validateToken);
+router.post('/restorePasswordEmail', usersController.sendRestorePassword);
+router.post('/restorePassword', usersController.restorePassword);
 
 module.exports = router;
