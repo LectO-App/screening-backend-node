@@ -421,9 +421,9 @@
             "schema": {
               "type": "object",
               "properties": {
-                "key": {
+                "token": {
                   "type": "string",
-                  "example": "key"
+                  "example": "token"
                 },
                 "student": {
                   "type": "object",
@@ -442,7 +442,7 @@
                     },
                     "birth": {
                       "type": "string",
-                      "example": "Date()"
+                      "example": "2020-01-01"
                     },
                     "schoolType": {
                       "type": "array",
@@ -531,37 +531,95 @@
                 }
               },
               "required": [
-                "key",
+                "token",
                 "student"
               ]
             }
           }
         ],
-        "responses": {}
+        "responses": {
+          "200": {
+            "description": "Correcly created student",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Correctly created student"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
       }
     },
     "/students/delete": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Students"
+        ],
+        "summary": "Deletes an existing student",
+        "description": "This lets you delete a student for a certain user",
         "parameters": [
           {
-            "name": "obj",
+            "name": "body",
             "in": "body",
+            "description": "User to delete",
             "schema": {
               "type": "object",
               "properties": {
                 "token": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "token"
                 },
                 "student": {
-                  "example": "any"
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "studentId"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
                 }
-              }
+              },
+              "required": [
+                "token",
+                "student"
+              ]
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Correcly deleted student",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Correctly deleted student"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
           "400": {
             "description": "Bad Request"
           }
@@ -570,26 +628,149 @@
     },
     "/students/modify": {
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Students"
+        ],
+        "summary": "Modifies an existing student",
+        "description": "This lets you modify a student for a certain user",
         "parameters": [
           {
-            "name": "obj",
+            "name": "body",
             "in": "body",
+            "description": "User to modify",
             "schema": {
               "type": "object",
               "properties": {
                 "token": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "token"
                 },
                 "student": {
-                  "example": "any"
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "studentId"
+                    },
+                    "alias": {
+                      "type": "string",
+                      "example": "Nombre"
+                    },
+                    "province": {
+                      "type": "string",
+                      "example": "CABA"
+                    },
+                    "locality": {
+                      "type": "string",
+                      "example": "CABA"
+                    },
+                    "birth": {
+                      "type": "string",
+                      "example": "2020-01-01"
+                    },
+                    "schoolType": {
+                      "type": "array",
+                      "example": [
+                        "Privada",
+                        "Publica"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "genre": {
+                      "type": "array",
+                      "example": [
+                        "Masculino",
+                        "Femenino",
+                        "Otro"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "isSpanish": {
+                      "type": "array",
+                      "example": [
+                        "true",
+                        "false"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "schoolYear": {
+                      "type": "array",
+                      "example": [
+                        0,
+                        1,
+                        2,
+                        3
+                      ],
+                      "items": {
+                        "type": "number"
+                      }
+                    },
+                    "previousDiagnostic": {
+                      "type": "array",
+                      "example": [
+                        true,
+                        false
+                      ],
+                      "items": {
+                        "type": "boolean"
+                      }
+                    },
+                    "previousDiagnostcDetails": {
+                      "type": "string",
+                      "example": "Si la respuesta anterior fue true"
+                    },
+                    "hand": {
+                      "type": "array",
+                      "example": [
+                        "Diestro",
+                        "Zurdo"
+                      ],
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "parentsLevel": {
+                      "type": "string",
+                      "example": "Universitario"
+                    }
+                  },
+                  "required": [
+                    "id"
+                  ]
                 }
-              }
+              },
+              "required": [
+                "token",
+                "student"
+              ]
             }
           }
         ],
         "responses": {
+          "200": {
+            "description": "Correcly updated student",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "example": "Correctly updated student"
+                }
+              },
+              "required": [
+                "status"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
           "400": {
             "description": "Bad Request"
           }
@@ -598,49 +779,276 @@
     },
     "/students/get": {
       "post": {
-        "tags": [],
-        "description": "",
-        "parameters": [
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "example": "any"
-                }
-              }
-            }
-          }
+        "tags": [
+          "Students"
         ],
-        "responses": {}
-      }
-    },
-    "/students/getById": {
-      "post": {
-        "tags": [],
-        "description": "",
+        "summary": "Get a list of all students",
+        "description": "This lets you get all students for a certain user",
         "parameters": [
           {
-            "name": "obj",
+            "name": "body",
             "in": "body",
+            "description": "Session",
             "schema": {
               "type": "object",
               "properties": {
                 "token": {
-                  "example": "any"
-                },
-                "studentId": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "token"
                 }
-              }
+              },
+              "required": [
+                "token"
+              ]
             }
           }
         ],
         "responses": {
-          "400": {
-            "description": "Bad Request"
+          "200": {
+            "description": "Correcly got student",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "studentId"
+                  },
+                  "alias": {
+                    "type": "string",
+                    "example": "Nombre"
+                  },
+                  "province": {
+                    "type": "string",
+                    "example": "CABA"
+                  },
+                  "locality": {
+                    "type": "string",
+                    "example": "CABA"
+                  },
+                  "birth": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                  },
+                  "schoolType": {
+                    "type": "array",
+                    "example": [
+                      "Privada",
+                      "Publica"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "genre": {
+                    "type": "array",
+                    "example": [
+                      "Masculino",
+                      "Femenino",
+                      "Otro"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "isSpanish": {
+                    "type": "array",
+                    "example": [
+                      "true",
+                      "false"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "schoolYear": {
+                    "type": "array",
+                    "example": [
+                      0,
+                      1,
+                      2,
+                      3
+                    ],
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "previousDiagnostic": {
+                    "type": "array",
+                    "example": [
+                      true,
+                      false
+                    ],
+                    "items": {
+                      "type": "boolean"
+                    }
+                  },
+                  "previousDiagnostcDetails": {
+                    "type": "string",
+                    "example": "Si la respuesta anterior fue true"
+                  },
+                  "hand": {
+                    "type": "array",
+                    "example": [
+                      "Diestro",
+                      "Zurdo"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "parentsLevel": {
+                    "type": "string",
+                    "example": "Universitario"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/students/getById": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "Get one student with its results",
+        "description": "Gets the student with the list of result",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Session",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "token"
+                }
+              },
+              "required": [
+                "token"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Correcly got student",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "example": "studentId"
+                  },
+                  "alias": {
+                    "type": "string",
+                    "example": "Nombre"
+                  },
+                  "province": {
+                    "type": "string",
+                    "example": "CABA"
+                  },
+                  "locality": {
+                    "type": "string",
+                    "example": "CABA"
+                  },
+                  "birth": {
+                    "type": "string",
+                    "example": "2020-01-01"
+                  },
+                  "schoolType": {
+                    "type": "array",
+                    "example": [
+                      "Privada",
+                      "Publica"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "genre": {
+                    "type": "array",
+                    "example": [
+                      "Masculino",
+                      "Femenino",
+                      "Otro"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "isSpanish": {
+                    "type": "array",
+                    "example": [
+                      "true",
+                      "false"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "schoolYear": {
+                    "type": "array",
+                    "example": [
+                      0,
+                      1,
+                      2,
+                      3
+                    ],
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "previousDiagnostic": {
+                    "type": "array",
+                    "example": [
+                      true,
+                      false
+                    ],
+                    "items": {
+                      "type": "boolean"
+                    }
+                  },
+                  "previousDiagnostcDetails": {
+                    "type": "string",
+                    "example": "Si la respuesta anterior fue true"
+                  },
+                  "hand": {
+                    "type": "array",
+                    "example": [
+                      "Diestro",
+                      "Zurdo"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "parentsLevel": {
+                    "type": "string",
+                    "example": "Universitario"
+                  }
+                },
+                "required": [
+                  "id"
+                ]
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
