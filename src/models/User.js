@@ -7,7 +7,7 @@ module.exports = model(
 		password: { type: String, required: true },
 		name: { type: String, required: true },
 		verified: { type: Boolean, required: true, default: false },
-		paidTests: { type: Number, default: 0, required: true },
+		takenTests: { type: Number, default: 0, required: true },
 		students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
 		registrationDate: { type: Date },
 		verificationDate: { type: Date },

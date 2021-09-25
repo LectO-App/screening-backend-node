@@ -9,6 +9,11 @@ module.exports.signEmail = function (email) {
 	return jwt.sign({ email }, process.env.JWT_EMAIL_SECRET, { expiresIn: '24h' });
 };
 
+module.exports.signRestorePassword = function (email) {
+	return jwt.sign({ email }, process.env.JWT_RESTORE_PASSWORD_SECRET, { expiresIn: '2h' });
+};
+
+
 module.exports.verifyToken = async function (token) {
     try {
         const email = await jwt.verify(token, process.env.JWT_SECRET);
@@ -22,7 +27,7 @@ module.exports.verifyTokenAndGetUser = async function (token, res, options = {})
 	try {
 		const { email } = await jwt.verify(token, process.env.JWT_SECRET);
 		if ('populate' in options) {
-			const user = await User.findOne({ email }).populate(options.populate);
+			const user = await User.findOne({ email }).populate(options.populate, "_id alias");
 			return user;
 		} else {
 			const user = await User.findOne({ email });
@@ -35,11 +40,26 @@ module.exports.verifyTokenAndGetUser = async function (token, res, options = {})
 	}
 };
 
-module.exports.verifyEmail = async function (token) {
+module.exports.verifyEmail = async function (token, res) {
 	try {
-		const email = await jwt.verify(token, process.env.JWT_EMAIL_SECRET);
-		return email;
+		const { email } = await jwt.verify(token, process.env.JWT_EMAIL_SECRET);
+		const user = await User.findOne({ email });
+		return user;
 	} catch (error) {
+		console.log(error);
+		res.status(400).json({ status: 'Invalid token' });
+		return 'Error';
+	}
+};
+
+module.exports.verifyRestorePassword = async function (token, res) {
+	try {
+		const { email } = await jwt.verify(token, process.env.JWT_RESTORE_PASSWORD_SECRET);
+		const user = await User.findOne({ email });
+		return user;
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ status: 'Invalid token' });
 		return 'Error';
 	}
 };
