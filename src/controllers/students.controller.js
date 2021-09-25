@@ -3,8 +3,6 @@ const { verifyTokenAndGetUser, verifyToken } = require('../auth/tokenManager');
 const User = require('../models/User');
 const Student = require('../models/Student');
 
-const getResults = require('../utils/getResults');
-
 const studentsController = {};
 
 studentsController.createStudent = async (req, res) => {
@@ -177,7 +175,7 @@ studentsController.modifyStudent = async (req, res) => {
 studentsController.getStudentById = async (req, res) => {
 	// #swagger.tags = ['Students']
 	// #swagger.summary = 'Get one student with its results'
-	// #swagger.description = 'Gets the student with the list of result's ids'
+	// #swagger.description = 'Gets the student with the list of results ids'
 
 	const { token, studentId } = req.body;
 	const user = await verifyTokenAndGetUser(token, res);
@@ -199,30 +197,36 @@ studentsController.getStudentById = async (req, res) => {
 		return;
 	}
 
-	const student = await Student.findOne({ _id: studentId }).populate('results');
-	const results = await getResults(student.results || []);
+	const student = await Student.findOne({ _id: studentId }).populate('results', "_id testType date finished");
 
-	res.json({ student, results });
+	res.json({ student });
 	
 	/* #swagger.responses[200] = {
 		description: 'Correcly got student',
 		schema: {
 			$student: {
 				$id: 'studentId',
-				alias: 'Nombre',
-				province: 'CABA',
-				locality: 'CABA',
-				birth: '2020-01-01',
-				schoolType: ['Privada', 'Publica'],
-				genre: ['Masculino', 'Femenino', 'Otro'],
-				isSpanish: ['true', 'false'],
-				schoolYear: [0, 1, 2, 3],
-				previousDiagnostic: [true, false],
-				previousDiagnostcDetails: 'Si la respuesta anterior fue true',
-				hand: ['Diestro','Zurdo'],
-				parentsLevel: 'Universitario',
+				$alias: 'Nombre',
+				$province: 'CABA',
+				$locality: 'CABA',
+				$birth: '2020-01-01',
+				$schoolType: ['Privada', 'Publica'],
+				$genre: ['Masculino', 'Femenino', 'Otro'],
+				$isSpanish: ['true', 'false'],
+				$schoolYear: [0, 1, 2, 3],
+				$previousDiagnostic: [true, false],
+				$previousDiagnostcDetails: 'Si la respuesta anterior fue true',
+				$hand: ['Diestro','Zurdo'],
+				$parentsLevel: 'Universitario',
+				$results: [
+					{
+						$_id: "id",
+						$testType: "Dislexia",
+						$date: "dateObject",
+						$finished: true
+					}
+				]
 			},
-			$results: []
 		}
 	} */
 };
@@ -253,18 +257,7 @@ studentsController.getAllUserStudents = async (req, res) => {
 		schema: [
 			{
 				$id: 'studentId',
-				alias: 'Nombre',
-				province: 'CABA',
-				locality: 'CABA',
-				birth: '2020-01-01',
-				schoolType: ['Privada', 'Publica'],
-				genre: ['Masculino', 'Femenino', 'Otro'],
-				isSpanish: ['true', 'false'],
-				schoolYear: [0, 1, 2, 3],
-				previousDiagnostic: [true, false],
-				previousDiagnostcDetails: 'Si la respuesta anterior fue true',
-				hand: ['Diestro','Zurdo'],
-				parentsLevel: 'Universitario',
+				$alias: 'Nombre'
 			}
 		]
 	} */

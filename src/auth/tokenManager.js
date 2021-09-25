@@ -27,7 +27,7 @@ module.exports.verifyTokenAndGetUser = async function (token, res, options = {})
 	try {
 		const { email } = await jwt.verify(token, process.env.JWT_SECRET);
 		if ('populate' in options) {
-			const user = await User.findOne({ email }).populate(options.populate);
+			const user = await User.findOne({ email }).populate(options.populate, "_id alias");
 			return user;
 		} else {
 			const user = await User.findOne({ email });

@@ -16,7 +16,7 @@ const usersRouter = require('./routes/users.router');
 const User = require('./models/User');
 const Student = require('./models/Student');
 const Result = require('./models/Result');
-constAnswer = require('./models/Answer');
+const Answer = require('./models/Answer');
 
 mongoose.connect(process.env.DB_URL, {
 	useNewUrlParser: true,
@@ -36,7 +36,6 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3030;
 
-app.get('/', (_, res) => res.send('Bienvenido a Screening Dislexia'));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 app.use('/users', usersRouter);
