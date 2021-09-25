@@ -1053,15 +1053,7 @@
         }
       }
     },
-    "/results/": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/results/start": {
+    "/dislexia/start": {
       "post": {
         "tags": [],
         "description": "",
@@ -1085,7 +1077,7 @@
         "responses": {}
       }
     },
-    "/results/answerQuestion": {
+    "/dislexia/answerQuestion": {
       "post": {
         "tags": [],
         "description": "",

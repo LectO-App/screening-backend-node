@@ -10,13 +10,13 @@ const mongoose = require('mongoose');
 const app = express();
 
 const studentsRouter = require('./routes/students.router');
-const resultsRouter = require('./routes/test.router');
+const testRouter = require('./routes/test.router');
 const usersRouter = require('./routes/users.router');
 
 const User = require('./models/User');
 const Student = require('./models/Student');
-const Test = require('./models/Test');
 const Result = require('./models/Result');
+constAnswer = require('./models/Answer');
 
 mongoose.connect(process.env.DB_URL, {
 	useNewUrlParser: true,
@@ -41,7 +41,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 app.use('/users', usersRouter);
 app.use('/students', studentsRouter);
-app.use('/results', resultsRouter);
+app.use('/test', testRouter);
 
 app.listen(PORT, () => {
 	console.log('Server started at port ' + PORT);
