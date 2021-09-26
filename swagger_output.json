@@ -1211,6 +1211,97 @@
           }
         }
       }
+    },
+    "/results/getResult": {
+      "post": {
+        "tags": [
+          "Results"
+        ],
+        "summary": "Gets a complete test result",
+        "description": "This lets you get a complete result from a test, corresponding to a user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "User to create",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "token"
+                },
+                "resultId": {
+                  "type": "string",
+                  "example": "resultId"
+                }
+              },
+              "required": [
+                "token",
+                "resultId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Correcly got test",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "testType": {
+                  "type": "array",
+                  "example": [
+                    "Dislexia",
+                    "Discalculia"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "date": {
+                  "type": "string",
+                  "example": "Date"
+                },
+                "finished": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "answers": {
+                  "type": "object",
+                  "properties": {
+                    "questionName": {
+                      "type": "object",
+                      "properties": {
+                        "score": {
+                          "type": "number",
+                          "example": 10
+                        },
+                        "answer": {
+                          "type": "object",
+                          "properties": {}
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "testType",
+                "date",
+                "finished",
+                "answers"
+              ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
     }
   },
   "definitions": {}

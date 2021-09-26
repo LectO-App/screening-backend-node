@@ -34,7 +34,7 @@ testController.startTest = async (req, res) => {
 		user.takenTests += 1;
 		const studentRef = await Student.findOne({ _id: student });
 	
-		const resultRef = new Result({ testType });
+		const resultRef = new Result({ userId: user._id, studentId: studentRef._id, testType });
 		studentRef.results.push(resultRef._id);
 	
 		await resultRef.save();
