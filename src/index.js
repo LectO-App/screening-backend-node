@@ -12,6 +12,7 @@ const app = express();
 const studentsRouter = require('./routes/students.router');
 const testRouter = require('./routes/test.router');
 const usersRouter = require('./routes/users.router');
+const resultsRouter = require('./routes/results.router');
 
 const User = require('./models/User');
 const Student = require('./models/Student');
@@ -41,6 +42,7 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 app.use('/users', usersRouter);
 app.use('/students', studentsRouter);
 app.use('/test', testRouter);
+app.use('/results', resultsRouter);
 
 app.listen(PORT, () => {
 	console.log('Server started at port ' + PORT);
