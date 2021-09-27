@@ -1223,7 +1223,7 @@
           {
             "name": "body",
             "in": "body",
-            "description": "User to create",
+            "description": "Data",
             "schema": {
               "type": "object",
               "properties": {
@@ -1292,6 +1292,109 @@
                 "finished",
                 "answers"
               ],
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/results/getStatistics": {
+      "post": {
+        "tags": [
+          "Results"
+        ],
+        "summary": "Gets statistical data for a test",
+        "description": "This lets you get the corresponding standard deviation and median for the questions of a certain test. Filters can be used.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Data",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "token"
+                },
+                "resultId": {
+                  "type": "string",
+                  "example": "resultId"
+                },
+                "filters": {
+                  "type": "object",
+                  "properties": {
+                    "province": {
+                      "type": "string",
+                      "example": "CABA(Opcional)"
+                    },
+                    "locality": {
+                      "type": "string",
+                      "example": "CABA(Opcional)"
+                    },
+                    "schoolType": {
+                      "type": "string",
+                      "example": "Privada(Opcional)"
+                    },
+                    "genre": {
+                      "type": "string",
+                      "example": "Masculino(Opcional)"
+                    },
+                    "schoolYear": {
+                      "type": "number",
+                      "example": 0
+                    },
+                    "previousDiagnostic": {
+                      "type": "boolean",
+                      "example": false
+                    }
+                  }
+                }
+              },
+              "required": [
+                "token",
+                "resultId"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Correctly calculated statistics",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "nombreDePregunta"
+                  },
+                  "desvioEstandar": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "mediana": {
+                    "type": "number",
+                    "example": 1
+                  },
+                  "cantidad": {
+                    "type": "number",
+                    "example": 10
+                  }
+                },
+                "required": [
+                  "_id",
+                  "desvioEstandar",
+                  "mediana",
+                  "cantidad"
+                ]
+              },
               "xml": {
                 "name": "main"
               }

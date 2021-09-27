@@ -106,10 +106,12 @@ resultsController.getStatsForTest = async (req, res) => {
     /* #swagger.responses[200] = {
         description: 'Correctly calculated statistics',
         schema: [
-            $_id: "nombreDePregunta",
-            $desvioEstandar: 1,
-            $mediana: 1,
-            $cantidad: 10
+            {
+                $_id: "nombreDePregunta",
+                $desvioEstandar: 1,
+                $mediana: 1,
+                $cantidad: 10,
+            }
         ]
     } */
 };
